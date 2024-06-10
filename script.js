@@ -19,7 +19,6 @@ const Gameboard = (function () {
     const updateBoard = (mark, rowIndex, columnIndex) => {
         if (board[rowIndex][columnIndex] === '') {
             board[rowIndex][columnIndex] = mark;
-
         }
 
     }
@@ -34,19 +33,37 @@ const Player = (name, mark) => {
 const gameController = (function () {
     let players = [];
     let currentPlayerIndex = 0;
-    const startGame = function (playerOneName, playerTwoName) {
+    let gameEnded = false;
+    const winner = document.querySelector('.winner');
+
+    const buttons = document.querySelector('.buttons');
+    const container = document.querySelector('.container');
+
+    const startGame = function (playerOneName = 'playerOne', playerTwoName = 'playerTwo') {
         players = [Player(playerOneName, 'X'), Player(playerTwoName, 'O')]
         Gameboard.resetBoard();
+        displayController.render();
+        gameEnded = false;
+        winner.textContent = '';
+
     }
     const playRound = function (rowIndex, columnIndex) {
+        if (gameEnded) return;
         const currentPlayer = players[currentPlayerIndex];
+        const selectedCell = Gameboard.displayBoard()[rowIndex][columnIndex];
+        if (selectedCell !== '') {
+            return;
+        }
         Gameboard.updateBoard(currentPlayer.getMark(), rowIndex, columnIndex);
         Gameboard.displayBoard();
         if (checkWin(currentPlayer.getMark())) {
-            console.log(`${currentPlayer.getName()} wins!`)
+            winner.textContent = currentPlayer.getName() + ' wins!!';
+            gameEnded = true;
         }
         else if (checkDraw()) {
-            console.log('It is a draw!')
+            winner.textContent = 'Draw!!';
+
+            gameEnded = true;
         }
         else {
             switchPlayer();
@@ -94,18 +111,71 @@ const gameController = (function () {
     const resetGame = function () {
         currentPlayerIndex = 0;
         Gameboard.resetBoard();
+        winner.textContent = '';
+
     };
     return { startGame, playRound, resetGame };
 })();
+const displayController = (function () {
+    const render = (function () {
+        const board = Gameboard.displayBoard();
+        const cells = document.querySelectorAll('.cell');
+        let i = 0; let j = 0;
+        cells.forEach((cell) => {
+            cell.textContent = board[i][j];
+            j++;
+            if (j === 3) {
+                i++;
+                j = 0;
+            }
+        })
 
-console.log(Gameboard.displayBoard());
-gameController.startGame('jimmy', 'maria');
-gameController.playRound(0, 1);
-gameController.playRound(0, 2);
-gameController.playRound(1, 1);
-gameController.playRound(1, 2);
-gameController.playRound(2, 2);
-gameController.playRound(2, 1);
-gameController.playRound(1, 0);
-gameController.playRound(0, 0);
-gameController.playRound(2, 0);
+    })
+    return { render };
+})();
+
+const startButton = document.querySelector('.start');
+const restartButton = document.querySelector('.restart');
+const cells = document.querySelectorAll('.cell');
+const addPlayers = document.querySelector('.addPlayers');
+let playerOneName = 'Player One';
+let playerTwoName = 'Player Two';
+gameController.startGame(playerOneName, playerTwoName);
+
+addPlayers.addEventListener('click', () => {
+    const input1 = document.querySelector('.input-one');
+    const input2 = document.querySelector('.input-two');
+    const playerOneName = input1.value;
+    const playerTwoName = input2.value;
+
+    gameController.startGame(playerOneName, playerTwoName);
+    input1.value = '';
+    input2.value = '';
+})
+startButton.addEventListener('click', () => {
+
+    gameController.startGame(playerOneName = 'playerOne', playerTwoName = 'playerTwo');
+    displayController.render();
+
+})
+
+restartButton.addEventListener('click', () => {
+
+    Gameboard.resetBoard();
+    gameController.startGame(playerOneName = 'playerOne', playerTwoName = 'playerTwo');
+    displayController.render();
+})
+
+cells.forEach((cell, index) => {
+    cell.addEventListener('click', () => {
+        const rowIndex = Math.floor(index / 3);
+        const columnIndex = index % 3;
+        gameController.playRound(rowIndex, columnIndex);
+        displayController.render();
+
+    })
+})
+
+
+
+

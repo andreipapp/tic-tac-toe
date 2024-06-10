@@ -1,0 +1,103 @@
+*{
+    margin:0;
+    padding:0;
+    /* box-sizing: border-box; */
+}
+body{
+    height:100vh;
+    font-family: 'Pixelify Sans';
+    overflow: hidden;
+}
+:root{
+    --darkpurple: #231942 ;
+    --purple: #5e548e;
+    --lightpurple: #9f86c0;
+    --lila: #be95c4;
+    --pink: #e0b1cb;
+    --boardwidth: 605px;
+}
+
+.container{
+    height:100%;
+    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: var(--lila);
+}
+
+.board{
+    max-height:var(--boardwidth);
+    max-width : 603px;
+    border: 3px dashed var(--purple);
+    display: flex;
+    flex-wrap: wrap;
+    
+}
+.cell {
+ width: 199px;
+ height: 195px;   
+ border: 1px solid var(--purple);
+ font-size: 80px;
+ line-height: 195px;
+ text-align: center;
+ color: var(--darkpurple);
+}
+.nav{
+    text-align: center;
+    padding: 10px 0;
+    font-size: 30px;
+    width:100%;
+    background-color: var(--darkpurple);
+    color: var(--lila)
+}
+.buttons{
+    width: var(--boardwidth);
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 20px;
+   
+}
+.name-inputs{
+    padding-top:20px;
+    display: flex;
+    gap:25px;
+    flex-direction: column;
+    color: var(--darkpurple);
+ 
+}
+.names{
+    width:var(--boardwidth);
+     display: flex;
+     justify-content: space-between;
+}
+.winner{
+    font-size:30px;
+
+    color:var(--darkpurple);
+    background-color: var(--lila);
+    text-align: center;
+    position: absolute;
+    top: 200px;
+}
+button{
+    padding:5px;
+    border-radius: 10px;
+    border: none;
+    font-family: 'Pixelify Sans';
+    font-size: 20px;
+    background-color: var(--darkpurple);
+    color: var(--lila);
+}
+.button-input{
+    margin: auto
+}
+
+input{
+    border-radius: 20px;
+    background: transparent;
+    color: var(--darkpurple);
+    padding-left: 5px;
+    font-family: 'Pixelify Sans';
+}
